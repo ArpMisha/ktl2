@@ -4,7 +4,7 @@
     name: app
     source: build
     build:
-      path: /home/alaricode/playbook_ktl/roles/flask/app
+      path: ~/playbook_ktl/roles/flask/app
     state: present
   become: True
 
