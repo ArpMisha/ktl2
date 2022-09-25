@@ -4,7 +4,7 @@
     name: nginxx 
     source: build
     build:
-      path: /home/alaricode/playbook_ktl/roles/nginx
+      path: ~/playbook_ktl/roles/nginx
     state: present
   become: True
 
