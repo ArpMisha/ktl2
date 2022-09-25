@@ -1,0 +1,19 @@
+---
+- name: create nginx image
+  docker_image:
+    name: nginxx 
+    source: build
+    build:
+      path: /home/alaricode/playbook_ktl/roles/nginx
+    state: present
+  become: True
+
+- name: start nginx container
+  docker_container:
+    name: nginx
+    image: nginxx
+    networks:
+      - name: flasknet
+    ports:
+      - "0.0.0.0:81:81"
+  become: True

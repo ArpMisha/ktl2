@@ -1,0 +1,59 @@
+- name: dobavlenue universe
+  apt_repository:
+    repo: "deb http://us.archive.ubuntu.com/ubuntu/ {{ ansible_distribution_release }} universe"
+    state: present
+  become: True
+
+- name: istall dop pack
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+    update-cache: yes
+    cache_valid_time: 86400
+  become: True
+
+- name: добавление ключа докер
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  become: True
+
+- name: установка стабильного репозитория 
+  apt_repository:
+    repo: >
+      deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg]
+      https://download.docker.com/linux/ubuntu
+      {{ ansible_distribution_release }} stable
+    state: present
+    update-cache: yes
+    filename: docker
+  become: True
+
+- name: установка докер-се
+  apt:
+    name: docker-ce
+    update-cache: yes
+  become: True
+
+- name: проверка что докер установлен
+  service:
+    name: docker
+    state: restarted
+    enabled: yes
+  become: True
+
+- name: завершение уствновки - добавление пользователя в группу
+  user:
+    name: "{{ ansible_user_id }}"
+    group: docker
+    append: yes
+  become: True
+
+- name: перезагрузка
+  reboot:
+  become: true
+

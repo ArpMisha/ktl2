@@ -1,0 +1,8 @@
+---
+- name: настройка web - nginx + flask
+  hosts: web
+  roles:
+    - preconfig
+    - flask
+    - nginx
+    - database

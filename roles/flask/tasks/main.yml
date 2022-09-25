@@ -1,0 +1,26 @@
+---
+- name: create flask image
+  docker_image:
+    name: app
+    source: build
+    build:
+      path: /home/alaricode/playbook_ktl/roles/flask/app
+    state: present
+  become: True
+
+- name: create network
+  docker_network: name=flasknet
+  become: True
+
+- name: start flask-app container
+  docker_container:
+    name: app
+    image: app
+    networks:
+      - name: flasknet
+    exposed_ports:
+      - 5000
+    command: gunicorn --bind 0.0.0.0:5000 main:app
+  become: True
+
+

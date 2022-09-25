@@ -1,0 +1,37 @@
+---
+- name: создание директории для хранения данных
+  file:
+    path: /data/pgdata
+    state: directory
+  become: True
+
+- name: create db image
+  docker_image:
+    name: db_image
+    source: build
+    build:
+      path: /home/alaricode/playbook_ktl/roles/database
+    state: present
+  become: True
+
+- name: start postgres container
+  docker_container:
+    name: db
+    image: db_image
+    networks:
+      - name: flasknet
+    exposed_ports:
+      - 5432
+    volumes:
+      - "/data/pgdata:/var/lib/postgresql/data"
+    env:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 2RTY4356
+      POSTGRES_DB: ktl_db
+  become: True
+
+- name: восстановление базы данных из копии
+  command: docker exec db sh -c "pg_restore -U postgres -d ktl_db /var/lib/postgresql/backup/ktl2.sql"
+  become: True
+
+
