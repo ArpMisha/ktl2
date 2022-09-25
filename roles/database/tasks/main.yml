@@ -10,7 +10,7 @@
     name: db_image
     source: build
     build:
-      path: /home/alaricode/playbook_ktl/roles/database
+      path: ~/playbook_ktl/roles/database
     state: present
   become: True
 
